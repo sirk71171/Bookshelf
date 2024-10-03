@@ -71,6 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const bookToShelf = myLibrary[myLibrary.length - 1];
 
         const bookDiv = document.createElement("div");
+        bookDiv.setAttribute("style", "text-wrap:pretty; width:200px; background-color: white; z-index: 3; border-radius: 12px;box-shadow:5px 5px 5px black; margin: 5%;");
+
 
         const inputElement = document.createElement("input");
         inputElement.setAttribute("class", "image-upload");
@@ -78,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const imageElement = document.createElement("img");
         imageElement.setAttribute("class", "imagePreview");
-        imageElement.setAttribute("style", "width:150px;height:150px;")
+        imageElement.setAttribute("style", "width:200px;height:150px;border-radius:12px;")
 
 
         const bookTitle = bookToShelf.title;
@@ -102,6 +104,8 @@ document.addEventListener("DOMContentLoaded", () => {
         bookInfoRead.setAttribute("class", "bookInfo")
         bookInfoRead.textContent = "Read?: " + bookRead;
 
+        const newLine = document.createElement("br");
+
         inputElement.addEventListener("change", function () {
             const file = inputElement.files[0];
 
@@ -117,7 +121,8 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
         firstDiv.appendChild(bookDiv);
-        bookDiv.appendChild(imageElement)
+        bookDiv.appendChild(imageElement);
+        bookDiv.appendChild(newLine);
         bookDiv.appendChild(inputElement); 
         bookDiv.appendChild(bookInfoTitle);
         bookDiv.appendChild(bookInfoAuthor);
