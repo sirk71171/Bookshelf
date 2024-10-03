@@ -1,3 +1,6 @@
+html {
+    background-color: red;
+}
 dialog::backdrop {
     opacity: 0.7;
 }
@@ -5,8 +8,12 @@ dialog::backdrop {
     width: 80vw;
     height: 90vh;
     display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    grid-auto-flow: column;
 }
 .imagePreview {
     width: 150px;
     height: 150px;
+    
 }
