@@ -7,30 +7,33 @@
     <link type="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="form-container">
-            <form id="my-form">
-                <label for="author">Author: </label><br>
-                <input id="author">
-                <label for="title">Title: </label><br>
-                <input id="title">
-                <label for="number-of-pages">Number of Pages: </label><br>
-                <input id="number-of-pages">
-                
-                <p>Have you read this book?</p>
+    <dialog id="form-dialog">
+        <button id="close">X</button>
+        <form id="my-form">
+            <label for="author">Author: </label><br>
+            <input id="author">
+            <label for="title">Title: </label><br>
+            <input id="title">
+            <label for="number-of-pages">Number of Pages: </label><br>
+            <input id="number-of-pages">
+                    
+            <p>Have you read this book?</p>
 
-                <input type="radio" id="read" name="read" value="read">
-                <label for="read">Read</label><br>
-                <input type="radio" id="not-read" name="read" value="not read">
-                <label for="not-read">Not read</label>
+            <input type="radio" id="read" name="read" value="read">
+            <label for="read">Read</label><br>
+            <input type="radio" id="not-read" name="read" value="not read">
+            <label for="not-read">Not read</label>
 
-                <input type="submit" class="submit" id="submit" name="submit">
-                
-            </form>
-        </div>
-        <div class="shelf-container">
+            <input type="submit" class="submit" id="submit" name="submit">
+                    
+        </form>
+    
+    </dialog>
+    <button id="newBook">NEW BOOK</button>
 
-        </div>
+    <div class="shelf-container">
+
+    </div>
     </div>
     <script src="script.js"></script>
 </body>
