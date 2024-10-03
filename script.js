@@ -13,6 +13,10 @@ const titleName = document.getElementById("title");
 const pagesNumber = document.getElementById("number-of-pages");
 const readOrNot = document.getElementsByName("read");
 
+const dialog = document.querySelector("dialog");
+const openModal = document.querySelector("newBook");
+const closeModal = document.querySelector("close");
+
 const author = authorName.value;
 const title = titleName.value;
 const pages = pagesNumber.value;
@@ -38,6 +42,17 @@ function handleForm (event) {
     addBookToLibrary(author, title, pages, readNotRead);
     
 }
+// Open modal
+openModal.addEventListener("click", () => {
+    dialog.showModal;
+})
+
+// Close modal
+closeModal.addEventListener("click", () => {
+    dialog.close;
+})
+
+
 form.addEventListener("submit", handleForm)
 
 function addBookToLibrary(author, title, pages, read) {
