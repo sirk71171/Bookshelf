@@ -70,12 +70,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const pElement = document.createElement("p");
     function createShelfUnit (readNotRead) {
         const firstDiv = document.querySelector(".shelf-container");
-
-        const bookToShelf = myLibrary[myLibrary.length - 1];
+        const position1 = myLibrary.length;
+        let bookToShelf = myLibrary[myLibrary.length - 1];
         console.log(bookToShelf);
 
         const bookDiv = document.createElement("div");
         bookDiv.setAttribute("style", "text-wrap:pretty; width:280px; background-color: white; z-index: 3; border-radius: 12px;box-shadow:5px 5px 5px black; margin: 5%;");
+        bookDiv.setAttribute("id", `${position1}book`);
+        console.log(bookDiv);
 
 
         const inputElement = document.createElement("input");
@@ -87,25 +89,25 @@ document.addEventListener("DOMContentLoaded", () => {
         imageElement.setAttribute("style", "width:280px;height:340px;border-radius:12px;")
 
 
-        const bookTitle = bookToShelf.title;
-        const bookAuthor = bookToShelf.author;
-        const bookPages = bookToShelf.pages;
-        const bookRead = bookToShelf.read;
+        let bookTitle = bookToShelf.title;
+        let bookAuthor = bookToShelf.author;
+        let bookPages = bookToShelf.pages;
+        let bookRead = bookToShelf.read;
 
         const bookInfoTitle = document.createElement("p");
-        bookInfoTitle.setAttribute("class", "bookInfo")
+        bookInfoTitle.setAttribute("id", "bookTitle")
         bookInfoTitle.textContent = "Title: " + bookTitle;
         
         const bookInfoAuthor = document.createElement("p");
-        bookInfoAuthor.setAttribute("class", "bookInfo")
+        bookInfoAuthor.setAttribute("ic", "bookAuthor")
         bookInfoAuthor.textContent = "Author: " + bookAuthor;
         
         const bookInfoPages = document.createElement("p");
-        bookInfoPages.setAttribute("class", "bookInfo")
+        bookInfoPages.setAttribute("id", "bookPages")
         bookInfoPages.textContent = "Pages: " + bookPages;
 
         const bookInfoRead = document.createElement("p");
-        bookInfoRead.setAttribute("class", "bookInfo")
+        bookInfoRead.setAttribute("id", `${position1}bookRead`)
         bookInfoRead.textContent = "Read?: " + bookRead;
 
         const newLine = document.createElement("br");
@@ -150,28 +152,38 @@ document.addEventListener("DOMContentLoaded", () => {
             
 
         }
-        readButton.addEventListener("click", () => {
-            const position = (myLibrary.length);
-            console.log(position);
-            const specificPElement = document.getElementById(`${position}item`);
-            const specificButton = document.getElementById(`${position}`)
-            console.log(specificButton);
-            console.log(specificPElement);
-            specificButton.remove;
-            specificPElement.remove;
-            
-            readNotRead = "read";
-            console.log("the event fired");
-        })
         
     }
-    
+    readButton.addEventListener("click", () => {
+        const position = (myLibrary.length);
+        console.log(position);
+        const specificPElement = document.getElementById(`${position}item`);
+        const specificButton = document.getElementById(`${position}`)
+        console.log(specificButton);
+        console.log(specificPElement);
+        specificButton.remove();
+        specificPElement.remove();
+        let bookToShelf = myLibrary[position - 1];
+        console.log(bookToShelf);
+        bookToShelf.read = "read";
+        const pRead = document.getElementById(`${position}bookRead`);
+        pRead.remove();
+        const newPRead = document.createElement("p");
+        newPRead.setAttribute("id", "bookRead2");
+        newPRead.textContent = "Read? " + bookToShelf.read;
+        const divInQ = document.getElementById(`${position}book`);
+        divInQ.appendChild(newPRead);
+        console.log(myLibrary[0]);
+        console.log(bookToShelf.read);
+
+        console.log("the event fired");
+    })
 
     
     function myPosition () {
 
-        const position = myLibrary.length;
-        console.log(myLibrary.length);
+        const position = (myLibrary.length + 1);
+        console.log(position);
         return position;
     }
     console.log(myLibrary);
