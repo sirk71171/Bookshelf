@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
         this.position = myPosition();
     }
 
-
     const authorName = document.getElementById("author");
     const titleName = document.getElementById("title");
     const pagesNumber = document.getElementById("number-of-pages");
@@ -75,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log(bookToShelf);
 
         const bookDiv = document.createElement("div");
-        bookDiv.setAttribute("style", "text-wrap:pretty; width:280px; background-color: white; z-index: 3; border-radius: 12px;box-shadow:5px 5px 5px black; margin: 5%;");
+        bookDiv.setAttribute("style", "text-wrap:pretty; width:280px; background-color: white; z-index: 3; border-radius: 12px;box-shadow:5px 5px 5px black; margin: 5%; display: grid;");
         bookDiv.setAttribute("id", `${position1}book`);
         console.log(bookDiv);
 
@@ -99,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
         bookInfoTitle.textContent = "Title: " + bookTitle;
         
         const bookInfoAuthor = document.createElement("p");
-        bookInfoAuthor.setAttribute("ic", "bookAuthor")
+        bookInfoAuthor.setAttribute("id", "bookAuthor")
         bookInfoAuthor.textContent = "Author: " + bookAuthor;
         
         const bookInfoPages = document.createElement("p");
@@ -125,6 +124,22 @@ document.addEventListener("DOMContentLoaded", () => {
             };
             reader.readAsDataURL(file);
         }) 
+        // To be loaded first. Start button.
+        const startTimerImg = document.createElement("img");
+        startTimerImg.setAttribute("style", "font-size: 24px; border-radius:50%;height:48px;width:48px;");
+        startTimerImg.setAttribute("src", "timerIconDark.svg");
+        const startTimerButton = document.createElement("button");
+        startTimerButton.setAttribute("style", "border-radius:50%; align-self: end;background: none;color: inherit;border: none;padding: 0;cursor: pointer;outline: inherit;");
+        startTimerButton.setAttribute("id", `${position1}timerButton`);
+        startTimerButton.appendChild(startTimerImg);
+        // To be loaded after selecting start timer. Stop button.
+        const startTimerImg2 = document.createElement("img");
+        startTimerImg2.setAttribute("style", "font-size: 24px; border-radius:50%;height:48px;width:48px; background-color: lightblue;");
+        startTimerImg2.setAttribute("src", "timerIconDark.svg");
+        const endTimerButton = document.createElement("button");
+        endTimerButton.setAttribute("style", "border-radius:50%; align-self: end;background: none;color: inherit;border: none;padding: 0;cursor: pointer;outline: inherit;");
+        endTimerButton.setAttribute("id", `${position1}timerButton2`);
+        endTimerButton.appendChild(startTimerImg2);
 
         firstDiv.appendChild(bookDiv);
         bookDiv.appendChild(imageElement);
@@ -134,6 +149,8 @@ document.addEventListener("DOMContentLoaded", () => {
         bookDiv.appendChild(bookInfoAuthor);
         bookDiv.appendChild(bookInfoPages);
         bookDiv.appendChild(bookInfoRead);
+        
+        
         const position = myLibrary.length;
         console.log(position);
         if (readNotRead === "not read") {
@@ -148,10 +165,26 @@ document.addEventListener("DOMContentLoaded", () => {
             bookDiv.appendChild(pElement);
             bookDiv.appendChild(readButton);
 
-
-            
-
         }
+        bookDiv.appendChild(startTimerButton);
+
+        let timeArray = [];
+        let count = 0;
+
+        startTimerButton.addEventListener("click", () => {
+            start();
+            startTimerButton.remove();
+            bookDiv.appendChild(endTimerButton);
+        })
+        endTimerButton.addEventListener("click", () => {
+            let time = end();
+            endTimerButton.remove();
+            bookDiv.appendChild(startTimerButton);
+            timeArray[count] = time;
+            console.log(timeArray);
+            count++;
+        })
+        
         
     }
     readButton.addEventListener("click", () => {
@@ -179,17 +212,27 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("the event fired");
     })
 
-    
+    function start () {
+        startTime = new Date();
+    }
+    function end () {
+         endTime = new Date();
+
+        let timeElapsed = endTime - startTime;
+
+        let timeInSeconds = Math.round(timeElapsed/1000);
+
+        return timeInSeconds;
+    }
+
     function myPosition () {
 
         const position = (myLibrary.length + 1);
         console.log(position);
         return position;
     }
-    console.log(myLibrary);
-    })
 
     
-
-
+    console.log(myLibrary);
+    })
     
