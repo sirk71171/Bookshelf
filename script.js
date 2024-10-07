@@ -1,8 +1,9 @@
 
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Create array to store book objects.
     const myLibrary = [];
-
+    // Create book constructor.
     function Book(author, title, pages) {
         this.author = author;
         this.title = title;
@@ -11,6 +12,27 @@ document.addEventListener("DOMContentLoaded", () => {
         this.position = myPosition();
     }
 
+    // Book.prototype.readOrN = function () {
+    //     let checkedVal;
+    //     for (i = 0; i < 2; i++) {
+    //         if (readOrNot[i].checked) {
+    //             checkedVal = readOrNot[i].value;
+    //         }
+    //     }
+        
+    // }
+
+    let today = getCurrentDate();
+
+    // Create Timestorage constructor.
+    function Timestorage (bookEntry, today, timeArray) {
+        this.bookTitle = bookEntry.title;
+        this.timeArray = timeArray;
+        this.today = today;
+        this.totalTime = totalTime(timeArray);
+
+    }
+    // Declare global variables.
     const authorName = document.getElementById("author");
     const titleName = document.getElementById("title");
     const pagesNumber = document.getElementById("number-of-pages");
@@ -23,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const author = authorName.value;
     const title = titleName.value;
     const pages = pagesNumber.value;
-
+    // Determine whether or not, according to the user checked value, a book has been read.
     function readON () {
         for (i = 0; i < 2; i++) {
             if (readOrNot[i].checked) {
@@ -32,17 +54,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
+    // Create function that handles form processing.
     const form = document.getElementById("my-form");
     function handleForm (event) {
         event.preventDefault();
         const author = authorName.value;
         const title = titleName.value;
         const pages = pagesNumber.value;
-        const readNotRead = this.read.value;
+        let readNotRead = this.read.value;
         console.log(readNotRead);
-        addBookToLibrary(author, title, pages, readNotRead);
-        createShelfUnit(readNotRead);
+        let bookEntry = addBookToLibrary(author, title, pages, readNotRead);
+        console.log(Object.getPrototypeOf(bookEntry));
+        createShelfUnit(readNotRead, bookEntry);
 
         form.reset();
     }
@@ -60,14 +83,21 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", handleForm)
 
 
-
+    // Adds book object to myLibrary array.
     function addBookToLibrary(author, title, pages) {
-        const bookEntry = new Book(author, title, pages);
+        let bookEntry = new Book(author, title, pages);
         myLibrary.push(bookEntry);
+        return bookEntry;
     }
-    const readButton = document.createElement("button");
-    const pElement = document.createElement("p");
-    function createShelfUnit (readNotRead) {
+    //let readButton = document.createElement("button");
+    // let pElement = document.createElement("p");
+
+    // const node = document.createTextNode("Have you now read this book? ")
+    // const buttonNode = document.createTextNode("Yes");
+    // Adds the book as a GUI element.
+    function createShelfUnit (readNotRead, bookEntry) {
+
+
         const firstDiv = document.querySelector(".shelf-container");
         const position1 = myLibrary.length;
         let bookToShelf = myLibrary[myLibrary.length - 1];
@@ -86,6 +116,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const imageElement = document.createElement("img");
         imageElement.setAttribute("class", "imagePreview");
         imageElement.setAttribute("style", "width:280px;height:340px;border-radius:12px;")
+
+        let readButton = document.createElement("button");
+        let pElement = document.createElement("p");
 
 
         let bookTitle = bookToShelf.title;
@@ -140,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
         endTimerButton.setAttribute("style", "border-radius:50%; align-self: end;background: none;color: inherit;border: none;padding: 0;cursor: pointer;outline: inherit;");
         endTimerButton.setAttribute("id", `${position1}timerButton2`);
         endTimerButton.appendChild(startTimerImg2);
-
+        // Add all the components into the shelf and into the card.
         firstDiv.appendChild(bookDiv);
         bookDiv.appendChild(imageElement);
         bookDiv.appendChild(newLine);
@@ -153,10 +186,12 @@ document.addEventListener("DOMContentLoaded", () => {
         
         const position = myLibrary.length;
         console.log(position);
+
         if (readNotRead === "not read") {
 
             const node = document.createTextNode("Have you now read this book? ")
             const buttonNode = document.createTextNode("Yes");
+
             pElement.setAttribute("id", `${position}item`)
             pElement.appendChild(node);
             readButton.setAttribute("id", `${position}`);
@@ -168,6 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         bookDiv.appendChild(startTimerButton);
 
+        
         let timeArray = [];
         let count = 0;
 
@@ -178,15 +214,22 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         endTimerButton.addEventListener("click", () => {
             let time = end();
+            let today = getCurrentDate();
             endTimerButton.remove();
             bookDiv.appendChild(startTimerButton);
             timeArray[count] = time;
-            console.log(timeArray);
             count++;
+            let tlength = timeArray.length;
+            console.log(tlength);
+            if (tlength != 0) {
+                let timeLog = new Timestorage(bookEntry, today, timeArray);
+                console.log(timeLog);
+            }
         })
-        
-        
+        return readButton;
+
     }
+
     readButton.addEventListener("click", () => {
         const position = (myLibrary.length);
         console.log(position);
@@ -232,7 +275,28 @@ document.addEventListener("DOMContentLoaded", () => {
         return position;
     }
 
+    function totalTime (timeArray) {
+        let counter = 0;
+        let length = timeArray.length;
+        for (j = 0; j < length; j++) {
+            counter = counter + timeArray[j];
+        }
+        return counter;
+    };
     
-    console.log(myLibrary);
-    })
     
+    function getCurrentDate () {
+        let date = new Date();
+
+        // let day = date.getDay();
+        // let month = date.getMonth() + 1;
+        // let year = date.getFullYear();
+
+        // let currentDate = `${year}-${month}-${day}`;
+        // return currentDate;
+        return date;
+
+    }})
+//console.log(myLibrary);
+//function logTime () {
+//}
