@@ -1,15 +1,32 @@
 
-
+// function toggle (bookEntry) {
+//     if (toggleInput.checked) {
+//         bookEntry.read = "read";
+//         console.log(bookEntry.read);
+//     }
+//     else {
+//         bookEntry.read = "not read";
+//     }
+// }
 document.addEventListener("DOMContentLoaded", () => {
     // Create array to store book objects.
     const myLibrary = [];
+
+    function myPosition () {
+
+        const position = (myLibrary.length + 1);
+        console.log(position);
+        return position;
+    }
+
+    let position2 = myPosition();
     // Create book constructor.
     function Book(author, title, pages) {
         this.author = author;
         this.title = title;
         this.pages = parseInt(pages, 10);
         this.read = readON();
-        this.position = myPosition();
+        this.position = position2;
     }
 
     // Book.prototype.readOrN = function () {
@@ -17,12 +34,24 @@ document.addEventListener("DOMContentLoaded", () => {
     //     for (i = 0; i < 2; i++) {
     //         if (readOrNot[i].checked) {
     //             checkedVal = readOrNot[i].value;
+
     //         }
     //     }
-        
+    //     return checkedVal;
+    // }
+    // Book.prototype.toggleRead = function () {
+    //     if (toggleInput.checked) {
+    //         this.read = "read";
+    //         console.log(bookEntry.read);
+    //     }
+    //     else {
+    //         this.read = "not read";
+    //     }
     // }
 
-    let today = getCurrentDate();
+
+
+    //let today = getCurrentDate();
 
     // Create Timestorage constructor.
     function Timestorage (bookEntry, today, timeArray) {
@@ -53,6 +82,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     }
+
+
 
     // Create function that handles form processing.
     const form = document.getElementById("my-form");
@@ -90,11 +121,14 @@ document.addEventListener("DOMContentLoaded", () => {
         return bookEntry;
     }
     //let readButton = document.createElement("button");
-    // let pElement = document.createElement("p");
+    let pElement = document.createElement("p");
 
     // const node = document.createTextNode("Have you now read this book? ")
     // const buttonNode = document.createTextNode("Yes");
     // Adds the book as a GUI element.
+
+
+
     function createShelfUnit (readNotRead, bookEntry) {
 
 
@@ -114,12 +148,20 @@ document.addEventListener("DOMContentLoaded", () => {
         inputElement.setAttribute("type", "file");
 
         const imageElement = document.createElement("img");
-        imageElement.setAttribute("class", "imagePreview");
+        imageElement.setAttribute("id", `${position1}imagePreview`);
         imageElement.setAttribute("style", "width:280px;height:340px;border-radius:12px;")
-
-        let readButton = document.createElement("button");
+        
         let pElement = document.createElement("p");
 
+        const toggle = document.createElement("label");
+        toggle.setAttribute("class", "switch");
+        toggle.setAttribute("style", "position: relative;display: inline-block;width: 60px;height: 34px;");
+        let toggleInput = document.createElement("input");
+        toggleInput.setAttribute("type", "checkbox");
+        toggleInput.setAttribute("style", "opacity: 0;width: 0;height: 0;");
+        toggleInput.setAttribute("id", `${position1}tInput`);
+        const toggleSpan = document.createElement("span");
+        toggleSpan.setAttribute("class", "slider round");
 
         let bookTitle = bookToShelf.title;
         let bookAuthor = bookToShelf.author;
@@ -138,9 +180,9 @@ document.addEventListener("DOMContentLoaded", () => {
         bookInfoPages.setAttribute("id", "bookPages")
         bookInfoPages.textContent = "Pages: " + bookPages;
 
-        const bookInfoRead = document.createElement("p");
+        let bookInfoRead = document.createElement("p");
         bookInfoRead.setAttribute("id", `${position1}bookRead`)
-        bookInfoRead.textContent = "Read?: " + bookRead;
+        bookInfoRead.textContent = "I have " + bookRead + " this book.";
 
         const newLine = document.createElement("br");
 
@@ -151,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             reader.onload = function(e) {
                 const imageDataURL = e.target.result;
-                const imagePreview = document.querySelector(".imagePreview");
+                const imagePreview = document.querySelector(`#${position1}imagePreview`);
                 imagePreview.src = imageDataURL;
             
             };
@@ -181,29 +223,41 @@ document.addEventListener("DOMContentLoaded", () => {
         bookDiv.appendChild(bookInfoTitle);
         bookDiv.appendChild(bookInfoAuthor);
         bookDiv.appendChild(bookInfoPages);
-        bookDiv.appendChild(bookInfoRead);
         
         
         const position = myLibrary.length;
         console.log(position);
 
-        if (readNotRead === "not read") {
 
-            const node = document.createTextNode("Have you now read this book? ")
-            const buttonNode = document.createTextNode("Yes");
+        const nodeRead = document.createTextNode("I have read this book. ")
+        const nodeNotRead = document.createTextNode("I have not read this book. ");
 
-            pElement.setAttribute("id", `${position}item`)
-            pElement.appendChild(node);
-            readButton.setAttribute("id", `${position}`);
-            readButton.setAttribute("style", "z-index: 4;");
-            readButton.appendChild(buttonNode);
-            bookDiv.appendChild(pElement);
-            bookDiv.appendChild(readButton);
+        pElement.setAttribute("id", `${position}item`)
+        //pElement.appendChild(nodeRead);
 
-        }
+        bookDiv.appendChild(pElement);
+
+        toggle.appendChild(toggleInput);
+        toggle.appendChild(toggleSpan);
+
+        bookDiv.appendChild(toggle);
+
         bookDiv.appendChild(startTimerButton);
 
-        
+        bookDiv.appendChild(bookInfoRead);
+
+        let specificToggleInput = document.getElementById(`${position1}tInput`);
+
+        console.log(specificToggleInput);
+
+        console.log(specificToggleInput.value);
+
+        //specificToggleInput.addEventListener("change", toggle(bookEntry));
+
+        specificToggleInput.addEventListener("change", logEvent);
+
+        console.log(bookEntry.read);
+
         let timeArray = [];
         let count = 0;
 
@@ -212,6 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
             startTimerButton.remove();
             bookDiv.appendChild(endTimerButton);
         })
+
         endTimerButton.addEventListener("click", () => {
             let time = end();
             let today = getCurrentDate();
@@ -224,40 +279,37 @@ document.addEventListener("DOMContentLoaded", () => {
             if (tlength != 0) {
                 let timeLog = new Timestorage(bookEntry, today, timeArray);
                 console.log(timeLog);
+            }})
+
+        function logEvent () {
+            let specificPElement = document.getElementById(`${position1}bookRead`);
+            console.log(specificPElement);
+            if (specificToggleInput.checked === true){
+                //specificPElement.remove();
+                let bookToShelf = myLibrary[position1 - 1];
+                bookToShelf.read = "read";
+                specificPElement.remove();
+                bookInfoRead.textContent = "I have " + bookToShelf.read + " this book.";
+                
+                console.log("on");
+                
+                bookDiv.appendChild(specificPElement);
             }
-        })
-        return readButton;
+            else {
+                let bookToShelf = myLibrary[position1 - 1];
+                bookToShelf.read = "not read";
+                specificPElement.remove();
+                bookInfoRead.textContent = "I have " + bookToShelf.read + " this book.";
+                bookDiv.appendChild(specificPElement);
 
-    }
-
-    readButton.addEventListener("click", () => {
-        const position = (myLibrary.length);
-        console.log(position);
-        const specificPElement = document.getElementById(`${position}item`);
-        const specificButton = document.getElementById(`${position}`)
-        console.log(specificButton);
-        console.log(specificPElement);
-        specificButton.remove();
-        specificPElement.remove();
-        let bookToShelf = myLibrary[position - 1];
-        console.log(bookToShelf);
-        bookToShelf.read = "read";
-        const pRead = document.getElementById(`${position}bookRead`);
-        pRead.remove();
-        const newPRead = document.createElement("p");
-        newPRead.setAttribute("id", "bookRead2");
-        newPRead.textContent = "Read? " + bookToShelf.read;
-        const divInQ = document.getElementById(`${position}book`);
-        divInQ.appendChild(newPRead);
-        console.log(myLibrary[0]);
-        console.log(bookToShelf.read);
-
-        console.log("the event fired");
-    })
+                console.log("off");
+            }
+        }
 
     function start () {
         startTime = new Date();
     }
+    
     function end () {
          endTime = new Date();
 
@@ -268,13 +320,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return timeInSeconds;
     }
 
-    function myPosition () {
-
-        const position = (myLibrary.length + 1);
-        console.log(position);
-        return position;
-    }
-
     function totalTime (timeArray) {
         let counter = 0;
         let length = timeArray.length;
@@ -282,21 +327,19 @@ document.addEventListener("DOMContentLoaded", () => {
             counter = counter + timeArray[j];
         }
         return counter;
-    };
+    }
     
     
     function getCurrentDate () {
         let date = new Date();
 
-        // let day = date.getDay();
-        // let month = date.getMonth() + 1;
-        // let year = date.getFullYear();
+        let day = date.getDay();
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear();
 
-        // let currentDate = `${year}-${month}-${day}`;
-        // return currentDate;
+        let currentDate = `${year}-${month}-${day}`;
+        return currentDate;
         return date;
 
-    }})
-//console.log(myLibrary);
-//function logTime () {
-//}
+    }
+}})
